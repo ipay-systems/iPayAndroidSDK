@@ -1,0 +1,224 @@
+/*
+ * Copyright 2013 Chris Banes
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+version = getProperty("version.name")
+group = getProperty("group.name")
+
+def authPropertiesFile = rootProject.file("../iPaySDKAuthKey/auth.properties")
+def authProperties = new Properties()
+authProperties.load(new FileInputStream(authPropertiesFile))
+
+def isReleaseBuild() {
+    return version.contains("SNAPSHOT") == false
+}
+
+def getReleaseRepositoryUrl(Properties authProperties) {
+    return hasProperty('repository.url.release') ? getProperty("repository.url.release")
+            : authProperties["repository.url.release"]
+}
+
+def getSnapshotRepositoryUrl(Properties authProperties) {
+    return hasProperty('repository.url.snapshot') ? getProperty("repository.url.snapshot")
+            : authProperties["repository.url.snapshot"]
+}
+
+def getRepositoryUsername(Properties authProperties) {
+    return hasProperty('sonatype.oss.username') ? getProperty("sonatype.oss.username")
+            : authProperties["sonatype.oss.username"]
+}
+
+def getRepositoryPassword(Properties authProperties) {
+    return hasProperty('sonatype.oss.password') ? getProperty("sonatype.oss.password")
+            : authProperties["sonatype.oss.password"]
+}
+
+afterEvaluate { project ->
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+                pom.groupId = getProperty("group.name")
+                pom.artifactId = getProperty("pom.artifact.id")
+                pom.version = getProperty("version.name")
+
+                repository(url: getReleaseRepositoryUrl(authProperties)) {
+                    authentication(userName: getRepositoryUsername(authProperties), password: getRepositoryPassword(authProperties))
+                }
+                snapshotRepository(url: getSnapshotRepositoryUrl(authProperties)) {
+                    authentication(userName: getRepositoryUsername(authProperties), password: getRepositoryPassword(authProperties))
+                }
+
+                pom.project {
+                    name getProperty("version.name")
+                    packaging getProperty("pom.packaging")
+                    description getProperty("pom.description")
+                    url getProperty("pom.description")
+
+                    scm {
+                        url getProperty("pom.scm.url")
+                        connection getProperty("pom.scm.connection")
+                        developerConnection getProperty("pom.scm.dev.connection")
+                    }
+
+                    licenses {
+                        license {
+                            name getProperty("pom.licence.name")
+                            url getProperty("pom.licence.url")
+                            distribution getProperty("pom.licence.dist")
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id getProperty("pom.developer.id")
+                            name getProperty("pom.developer.name")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    signing {
+        required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
+        sign configurations.archives
+    }
+
+    if (project.getPlugins().hasPlugin('com.android.application') ||
+            project.getPlugins().hasPlugin('com.android.library')) {
+        task install(type: Upload, dependsOn: assemble) {
+            repositories.mavenInstaller {
+                configuration = configurations.archives
+
+                pom.groupId = getProperty("group.name")
+                pom.artifactId = getProperty("pom.artifact.id")
+                pom.version = getProperty("version.name")
+
+                pom.project {
+                    name getProperty("version.name")
+                    packaging getProperty("pom.packaging")
+                    description getProperty("pom.description")
+                    url getProperty("pom.description")
+
+                    scm {
+                        url getProperty("pom.scm.url")
+                        connection getProperty("pom.scm.connection")
+                        developerConnection getProperty("pom.scm.dev.connection")
+                    }
+
+                    licenses {
+                        license {
+                            name getProperty("pom.licence.name")
+                            url getProperty("pom.licence.url")
+                            distribution getProperty("pom.licence.dist")
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id getProperty("pom.developer.id")
+                            name getProperty("pom.developer.name")
+                        }
+                    }
+                }
+            }
+        }
+
+        task androidJavadocs(type: Javadoc) {
+            source = android.sourceSets.main.java.source
+            classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+        }
+
+        task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+            classifier = 'javadoc'
+            from androidJavadocs.destinationDir
+        }
+
+        task androidSourcesJar(type: Jar) {
+            classifier = 'sources'
+            from android.sourceSets.main.java.source
+        }
+    } else {
+        install {
+            repositories.mavenInstaller {
+                pom.groupId = getProperty("group.name")
+                pom.artifactId = getProperty("pom.artifact.id")
+                pom.version = getProperty("version.name")
+
+                pom.project {
+                    name getProperty("version.name")
+                    packaging getProperty("pom.packaging")
+                    description getProperty("pom.description")
+                    url getProperty("pom.description")
+
+                    scm {
+                        url getProperty("pom.scm.url")
+                        connection getProperty("pom.scm.connection")
+                        developerConnection getProperty("pom.scm.dev.connection")
+                    }
+
+                    licenses {
+                        license {
+                            name getProperty("pom.licence.name")
+                            url getProperty("pom.licence.url")
+                            distribution getProperty("pom.licence.dist")
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id getProperty("pom.developer.id")
+                            name getProperty("pom.developer.name")
+                        }
+                    }
+                }
+            }
+        }
+
+        task sourcesJar(type: Jar, dependsOn: classes) {
+            classifier = 'sources'
+            from sourceSets.main.allSource
+        }
+
+        task javadocJar(type: Jar, dependsOn: javadoc) {
+            classifier = 'javadoc'
+            from javadoc.destinationDir
+        }
+    }
+
+    if (JavaVersion.current().isJava8Compatible()) {
+        allprojects {
+            tasks.withType(Javadoc) {
+                options.addStringOption('Xdoclint:none', '-quiet')
+            }
+        }
+    }
+
+    artifacts {
+        if (project.getPlugins().hasPlugin('com.android.application') ||
+                project.getPlugins().hasPlugin('com.android.library')) {
+            archives androidSourcesJar
+            archives androidJavadocsJar
+        } else {
+            archives sourcesJar
+            archives javadocJar
+        }
+    }
+}

@@ -1,0 +1,61 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+
+    def sdkPropertiesFile = rootProject.file("sdk-settings.properties")
+    def sdkProperties = new Properties()
+    sdkProperties.load(new FileInputStream(sdkPropertiesFile))
+
+    ext.versions = [
+            'compileSdk'                : sdkProperties["sdk.compile.version"] as int,
+            'minSdk'                    : sdkProperties["sdk.min.version"] as int,
+            'targetSdk'                 : sdkProperties["sdk.target.version"] as int,
+            'sourceCompatibility'       : JavaVersion.valueOf(sdkProperties["java.compatibility.source"]),
+            'targetCompatibility'       : JavaVersion.valueOf(sdkProperties["java.compatibility.target"]),
+            'supportCompatLibrary'      : sdkProperties["library.support_compat.version"],
+            'junitLibrary'              : sdkProperties["library.junit.version"],
+            'roboelectricLibrary'       : sdkProperties["library.roboelectric.version"],
+            'supportTestRunnerLibrary'  : sdkProperties["library.support_test_runner.version"],
+            'supportTestEspressoLibrary': sdkProperties["library.support_test_espresso.version"],
+            'androidPluginLibrary'      : sdkProperties["library.android_plugin.version"]
+    ]
+
+    ext.deps = [
+            androidPlugin      : "com.android.tools.build:gradle:${versions.androidPluginLibrary}",
+            supportCompat      : "com.android.support:support-compat:${versions.supportCompatLibrary}",
+            junit              : "junit:junit:${versions.junitLibrary}",
+            roboelectric       : "org.robolectric:robolectric:${versions.roboelectricLibrary}",
+            supportTestRunner  : "com.android.support.test:runner:${versions.supportTestRunnerLibrary}",
+            supportTestEspresso: "com.android.support.test.espresso:espresso-core:${versions.supportTestEspressoLibrary}"
+    ]
+
+    repositories {
+        google()
+        jcenter()
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+    dependencies {
+        classpath deps.androidPlugin
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+subprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    group = getProperty("group")
+    version = getProperty("version.name")
+}
