@@ -1,0 +1,14 @@
+title: iPay Android SDK
+logo: /assets/img/logo.png
+description: Lightweight library to implement the iPay Checkout mechanism within an Android App.
+show_downloads: true
+javadoc:
+  url: ipay-sdk-android/1.x/bd/com/ipay/sdk/IPaySDK.html
+google_analytics:
+theme: jekyll-theme-minimal
+github:
+  is_project_page: true
+  repository_url: https://github.com/ipay-systems/iPayAndroidSDK
+  repository_nwo: ipay-systems/iPayAndroidSDK
+  owner_name: iPay Systems Ltd.
+  owner_url: https://www.ipay.com.bd
