@@ -18,6 +18,6 @@
 gradle/
 ipay-sdk/build/*
 ipay-sdk/libs/
-maven-release.properties
 docs/Gemfile.lock
 docs/*.gem
+.DS_Store
