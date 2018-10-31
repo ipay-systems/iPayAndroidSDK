@@ -21,3 +21,5 @@ ipay-sdk/libs/
 docs/Gemfile.lock
 docs/*.gem
 .DS_Store
+docs/.sass-cache/
+docs/_site/
