@@ -23,6 +23,7 @@ buildscript {
     ext.deps = [
             androidPlugin      : "com.android.tools.build:gradle:${versions.androidPluginLibrary}",
             supportCompat      : "com.android.support:support-compat:${versions.supportCompatLibrary}",
+            supportAnnotation  : "com.android.support:support-annotations:${versions.supportCompatLibrary}",
             junit              : "junit:junit:${versions.junitLibrary}",
             roboelectric       : "org.robolectric:robolectric:${versions.roboelectricLibrary}",
             supportTestRunner  : "com.android.support.test:runner:${versions.supportTestRunnerLibrary}",

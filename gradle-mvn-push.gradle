@@ -23,7 +23,9 @@ group = getProperty("group.name")
 def authPropertiesFile = rootProject.file("../iPaySDKAuthKey/auth.properties")
 def authProperties = new Properties()
 authProperties.load(new FileInputStream(authPropertiesFile))
-
+allprojects { ext."signing.keyId" = authProperties["signing.keyId"] }
+allprojects { ext."signing.secretKeyRingFile" = authProperties["signing.secretKeyRingFile"] }
+allprojects { ext."signing.password" = authProperties["signing.password"] }
 def isReleaseBuild() {
     return version.contains("SNAPSHOT") == false
 }
@@ -69,7 +71,7 @@ afterEvaluate { project ->
                     name getProperty("version.name")
                     packaging getProperty("pom.packaging")
                     description getProperty("pom.description")
-                    url getProperty("pom.description")
+                    url getProperty("pom.url")
 
                     scm {
                         url getProperty("pom.scm.url")
@@ -115,7 +117,7 @@ afterEvaluate { project ->
                     name getProperty("version.name")
                     packaging getProperty("pom.packaging")
                     description getProperty("pom.description")
-                    url getProperty("pom.description")
+                    url getProperty("pom.url")
 
                     scm {
                         url getProperty("pom.scm.url")
@@ -166,7 +168,7 @@ afterEvaluate { project ->
                     name getProperty("version.name")
                     packaging getProperty("pom.packaging")
                     description getProperty("pom.description")
-                    url getProperty("pom.description")
+                    url getProperty("pom.url")
 
                     scm {
                         url getProperty("pom.scm.url")

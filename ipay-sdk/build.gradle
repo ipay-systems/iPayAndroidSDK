@@ -32,6 +32,7 @@ android {
 
 dependencies {
     implementation deps.supportCompat
+    implementation deps.supportAnnotation
     testImplementation deps.junit
     testImplementation deps.roboelectric
     androidTestImplementation deps.supportTestRunner
