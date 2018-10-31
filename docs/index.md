@@ -8,10 +8,20 @@ layout: default
 
 ## ii. Import the iPay SDK
 
-To use the iPay SDK in a project, simply add the Android Archive Library(AAR) file to your libs folder.
+To use the iPay SDK in a project, simply add the dependency to your build.gradle or you can download and add Android Archive Library(AAR) file to your libs folder.
 
 `Important: If you're adding the SDK to an existing project, start at step 3.`
 
+### Install via Central Dependency
+1.  _Go to Android Studio, \| New Project \| Minimum SDK._
+2.  _Select API 16: Android 4.1 ( Jelly Bean ) or higher and create your new project._
+3.  _In your project, open your_app_module \| Gradle Scripts \| build.gradle (Project) and add the following line to the <span style="color:#00B2A2">dependencies{ }</span> section._
+```groovy
+implementation "bd.com.ipay.sdk:sdk-android:1.0.1"
+```
+4.  _Build your project._
+
+### Install via Downloaded AAR file
 1.  _Go to Android Studio, \| New Project \| Minimum SDK._
 2.  _Select API 16: Android 4.1 ( Jelly Bean ) or higher and create your new project._
 3. Go to Project Root Folder \| app. create a new folder, rename it to libs.
