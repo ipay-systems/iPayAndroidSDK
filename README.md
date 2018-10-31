@@ -19,7 +19,7 @@ Download [the latest JAR][2] or grab via Maven:
 ```
 or Gradle:
 ```groovy
-implementation 'bd.com.ipay.sdk:sdk-android:1.0.0'
+implementation 'bd.com.ipay.sdk:sdk-android:1.0.1'
 ```
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].
@@ -43,5 +43,5 @@ License
 
 
  [1]: https://ipay-systems.github.io/iPayAndroidSDK/
- [2]: https://repo1.maven.org/maven2/bd/com/ipay/sdk/sdk-android/1.0.0/sdk-android-1.0.0.aar
+ [2]: https://repo1.maven.org/maven2/bd/com/ipay/sdk/sdk-android/1.0.1/sdk-android-1.0.1.aar
  [snap]: https://oss.sonatype.org/content/repositories/snapshots/

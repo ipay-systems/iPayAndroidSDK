@@ -20,7 +20,7 @@ package bd.com.ipay.sdk;
  * @since 1.0.0-SNAPSHOT
  */
 public final class IPaySDKVersion {
-	private static final String VERSION = "1.0.0";
+	private static final String VERSION = "1.0.1";
 
 	public static String getSDKVersion() {
 		return VERSION;

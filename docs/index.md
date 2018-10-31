@@ -4,7 +4,7 @@ layout: default
 
 ## i. Download the iPay SDK for Android
 
-[![Download SDK](./assets/img/button_download-ipay-sdk.png)](./assets/downloads/ipay-sdk-release-1.0.0.154086648274.aar)
+[![Download SDK](./assets/img/button_download-ipay-sdk.png)](https://repo1.maven.org/maven2/bd/com/ipay/sdk/sdk-android/1.0.1/sdk-android-1.0.1.aar)
 
 ## ii. Import the iPay SDK
 
