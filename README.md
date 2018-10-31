@@ -14,7 +14,7 @@ Download [the latest JAR][2] or grab via Maven:
 <dependency>
   <groupId>bd.com.ipay.sdk</groupId>
   <artifactId>sdk-android</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1/version>
 </dependency>
 ```
 or Gradle:
