@@ -23,3 +23,5 @@ docs/*.gem
 .DS_Store
 docs/.sass-cache/
 docs/_site/
+.idea/markdown-navigator.xml
+.idea/markdown-navigator/
