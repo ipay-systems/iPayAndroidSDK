@@ -32,34 +32,50 @@ implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 ```
 5.  _Build your project._
 
+`Important: If your project compile SDK version is below 28 then add the following lines`
+```groovy
+configurations.all {
+    resolutionStrategy {
+        force "com.android.support:support-compat:$targetSupportLibraryVersion"
+        force "com.android.support:support-annotations:$targetSupportLibraryVersion"
+    }
+}
+```
 
 ## iii. Edit Your Resources and Manifest
 
 Create strings for your callback url scheme and for those needed to receive checkout status result in a **New Activity** add the CallbackActivityName to your AndroidManifest.xml. Also you can enable/disable SDK initialize logs.
 
-`Important: Please create a callback url scheme from iPay app. Please contact with us in order to create this.`
+`Important: Create a callback url scheme from iPay app. Please contact with us in order to create this url scheme.`
 
 1.  _Open your <span style="color:#00B2A2">/app/res/values/strings.xml</span> file._
 2.   _Add the following:_
 <br/><br/>
 ```xml
-\<string name="ipay_callback_url_scheme" translatable="false">YOUR_CALLBACK_CODE_FROM_IPAY_APP</string>
+    <string name="ipay_callback_url_scheme" translatable="false">YOUR_CALLBACK_CODE_FROM_IPAY_APP</string>
 ```
 3. _Open the /app/manifest/AndroidManifest.xml file._
-4. _Add the following meta-data element:_
+4. _Add the following meta-data elements:_
 <br/><br/>
 ```xml
-\<meta-data
-    android:name="bd.com.ipay.sdk.CallbackActivityName"
-    android:value="bd.com.ipay.activity.IPayCheckoutCallBackActivity" />
-\<!-- Optional metadata field. If you don't want to print anything in the log, use false as value.-->
-\<meta-data
-    android:name="com.facebook.sdk.AutoLogAppEventsEnabled"
-    android:value="true" />
-\<!-- Optional metadata field. update the value field by your own choice. Use this value to receive request result from onActivityResult-->
-\<meta-data
-    android:name="bd.com.ipay.sdk.CallbackRequestCode"
-    android:value="1234" />
+    <application>
+        <!-- Optional metadata field. If you want to get callback to a new activity,
+            then add the following like where the value will be the name of the callback activity 
+            you want to open.-->
+        <meta-data
+            android:name="bd.com.ipay.sdk.CallbackActivityName"
+            android:value="bd.com.ipay.activity.IPayCheckoutCallBackActivity" />
+        <!-- Optional metadata field. If you don't want to print anything in the log, 
+             use false as value.-->
+        <meta-data
+            android:name="com.facebook.sdk.AutoLogAppEventsEnabled"
+            android:value="true" />
+        <!-- Optional metadata field. update the value field by your own choice. 
+             Use this value to receive request result from onActivityResult-->
+        <meta-data
+            android:name="bd.com.ipay.sdk.CallbackRequestCode"
+            android:value="1234" />
+    </application>
 ```
 
 ## iv. Add checkout code snippet
@@ -160,9 +176,15 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                         val checkoutId = data.getStringExtra(IPaySDK.CHECKOUT_ID_KEY)
                         val checkoutStatus = data.getSerializableExtra(IPaySDK.CHECKOUT_STATUS_KEY)  as CheckoutStatus
                         when(checkoutStatus) {
-                            SUCCESS -> // call success callback url.
-                            FAILED -> // call failed callback url.
-                            CANCELLED -> // call cancelled callback url.
+                            SUCCESS -> {
+                                // call success callback url.
+                            }
+                            FAILED -> {
+                                // call failed callback url.
+                            }
+                            CANCELLED -> {
+                                // call cancelled callback url.
+                            }
                         }                  
                     }
                 }                
@@ -206,9 +228,15 @@ override fun onCreate(savedInstanceState: Bundle?) {
     val checkoutId = intent.getStringExtra(IPaySDK.CHECKOUT_ID_KEY)
     val checkoutStatus = intent.getSerializableExtra(IPaySDK.CHECKOUT_STATUS_KEY) as CheckoutStatus
     when(checkoutStatus) {
-        SUCCESS -> // call success callback url.
-        FAILED -> // call failed callback url.
-        CANCELLED -> // call cancelled callback url.
+        SUCCESS -> {
+            // call success callback url.
+        }
+        FAILED -> {
+            // call failed callback url.
+        }
+        CANCELLED ->{
+         // call cancelled callback url.
+        }
     }
 }
 ```
