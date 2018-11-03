@@ -4,7 +4,7 @@ layout: default
 
 ## i. Download the iPay SDK for Android
 
-[![Download SDK](./assets/img/button_download-ipay-sdk.png)](https://repo1.maven.org/maven2/bd/com/ipay/sdk/sdk-android/1.0.1/sdk-android-1.0.1.aar)
+[![Download SDK](./assets/img/button_download-ipay-sdk.png)](https://repo1.maven.org/maven2/bd/com/ipay/sdk/sdk-android/1.0.2/sdk-android-1.0.2.aar)
 
 ## ii. Import the iPay SDK
 
@@ -17,7 +17,7 @@ To use the iPay SDK in a project, simply add the dependency to your build.gradle
 2.  _Select API 16: Android 4.1 ( Jelly Bean ) or higher and create your new project._
 3.  _In your project, open your_app_module \| Gradle Scripts \| build.gradle (Project) and add the following line to the <span style="color:#00B2A2">dependencies{ }</span> section._
 ```groovy
-implementation "bd.com.ipay.sdk:sdk-android:1.0.1"
+implementation "bd.com.ipay.sdk:sdk-android:1.0.2"
 ```
 4.  _Build your project._
 

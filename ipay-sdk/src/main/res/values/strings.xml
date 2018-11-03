@@ -2,4 +2,5 @@
     <string name="ipay_callback_url_scheme" translatable="false">ipay_callback_url_scheme</string>
     <string name="please_wait">Please Wait…</string>
     <string name="cancel_checkout_transaction_message">Do you want to cancel payment?</string>
+    <string name="ipay_checkout">iPay Checkout</string>
 </resources>

@@ -24,6 +24,6 @@ import org.robolectric.RobolectricTestRunner;
 public class IPaySDKVersionTest {
 	@Test
 	public void testIPaySDKVersionNumber() {
-		Assert.assertEquals(IPaySDKVersion.getSDKVersion(), "1.0.1");
+		Assert.assertEquals(IPaySDKVersion.getSDKVersion(), "1.0.2");
 	}
 }

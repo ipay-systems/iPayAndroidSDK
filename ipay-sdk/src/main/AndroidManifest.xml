@@ -15,6 +15,9 @@
                 <data android:scheme="@string/ipay_callback_url_scheme" />
             </intent-filter>
         </activity>
+        <activity android:name=".sdk.activity.IPayWebCheckoutActivity"
+            android:label="@string/ipay_checkout"
+            />
         <provider
             android:name=".sdk.provider.IPaySDKInitProvider"
             android:authorities="${applicationId}.IPaySDKInitProvider"

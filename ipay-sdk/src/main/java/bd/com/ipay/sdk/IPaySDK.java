@@ -391,9 +391,29 @@ public final class IPaySDK {
 			return CheckoutState.INVALID_CHECKOUT_CALLBACK_URLS;
 		}
 
-		final CheckoutState checkoutState = performCheckout(activity, checkoutUrl, false);
-		switch (checkoutState) {
-			case IPAY_APP_NOT_INSTALLED:
+		try {
+			final CheckoutState checkoutState = performCheckout(activity, checkoutUrl, false);
+			switch (checkoutState) {
+				case IPAY_APP_NOT_INSTALLED:
+					Intent intent = new Intent(activity, IPayWebCheckoutActivity.class);
+					intent.putExtra(IPayCheckoutActivity.IPAY_CHECKOUT_URL_KEY, checkoutUrl);
+					intent.putExtra(IPayWebCheckoutActivity.THIRD_PARTY_CHECKOUT_CALLBACK_URL_KEY, checkoutCallbackActionUrls);
+					if (useCallbackActivity && TextUtils.isEmpty(getCheckoutCallBackActivity())) {
+						return CheckoutState.CHECKOUT_COMPLETE_ACTIVITY_NOT_FOUND;
+					} else {
+						intent.putExtra(IPayCheckoutActivity.CHECKOUT_COMPLETE_START_COMPONENT_KEY, useCallbackActivity);
+					}
+					if (useCallbackActivity) {
+						ActivityCompat.startActivity(activity, intent, null);
+					} else {
+						ActivityCompat.startActivityForResult(activity, intent, getCheckoutRequestCode(), null);
+					}
+					return CheckoutState.PROCESSING;
+				default:
+					return checkoutState;
+			}
+		} catch (IllegalStateException e) {
+			if (e.getMessage() != null && e.getMessage().equals(Constants.NO_IPAY_APP_INSTALLED_REASON)) {
 				Intent intent = new Intent(activity, IPayWebCheckoutActivity.class);
 				intent.putExtra(IPayCheckoutActivity.IPAY_CHECKOUT_URL_KEY, checkoutUrl);
 				intent.putExtra(IPayWebCheckoutActivity.THIRD_PARTY_CHECKOUT_CALLBACK_URL_KEY, checkoutCallbackActionUrls);
@@ -408,8 +428,9 @@ public final class IPaySDK {
 					ActivityCompat.startActivityForResult(activity, intent, getCheckoutRequestCode(), null);
 				}
 				return CheckoutState.PROCESSING;
-			default:
-				return checkoutState;
+			} else {
+				return CheckoutState.UNABLE_TO_PROCESS;
+			}
 		}
 	}
 
