@@ -392,7 +392,7 @@ public final class IPaySDK {
 		}
 
 		try {
-			final CheckoutState checkoutState = performCheckout(activity, checkoutUrl, false);
+			final CheckoutState checkoutState = performCheckout(activity, checkoutUrl, true);
 			switch (checkoutState) {
 				case IPAY_APP_NOT_INSTALLED:
 					Intent intent = new Intent(activity, IPayWebCheckoutActivity.class);
