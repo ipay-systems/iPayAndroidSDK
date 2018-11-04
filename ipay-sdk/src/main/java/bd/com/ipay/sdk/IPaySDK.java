@@ -341,8 +341,13 @@ public final class IPaySDK {
 			if (shouldThrow) {
 				throw new IPaySDKException(e.getMessage(), e);
 			} else {
-				Logger.e(TAG, e);
-				return CheckoutState.INVALID_CHECKOUT_URL;
+				if (e.getMessage() != null && e.getMessage().equals(Constants.NO_IPAY_APP_INSTALLED_REASON)) {
+					Logger.e(TAG, e);
+					return CheckoutState.IPAY_APP_NOT_INSTALLED;
+				} else {
+					Logger.e(TAG, e);
+					return CheckoutState.INVALID_CHECKOUT_URL;
+				}
 			}
 		} catch (Exception e) {
 			if (shouldThrow) {
@@ -412,7 +417,7 @@ public final class IPaySDK {
 				default:
 					return checkoutState;
 			}
-		} catch (IllegalStateException e) {
+		} catch (IPaySDKException e) {
 			if (e.getMessage() != null && e.getMessage().equals(Constants.NO_IPAY_APP_INSTALLED_REASON)) {
 				Intent intent = new Intent(activity, IPayWebCheckoutActivity.class);
 				intent.putExtra(IPayCheckoutActivity.IPAY_CHECKOUT_URL_KEY, checkoutUrl);
