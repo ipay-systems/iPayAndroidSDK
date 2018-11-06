@@ -26,6 +26,7 @@ authProperties.load(new FileInputStream(authPropertiesFile))
 allprojects { ext."signing.keyId" = authProperties["signing.keyId"] }
 allprojects { ext."signing.secretKeyRingFile" = authProperties["signing.secretKeyRingFile"] }
 allprojects { ext."signing.password" = authProperties["signing.password"] }
+
 def isReleaseBuild() {
     return version.contains("SNAPSHOT") == false
 }
@@ -61,10 +62,12 @@ afterEvaluate { project ->
                 pom.version = getProperty("version.name")
 
                 repository(url: getReleaseRepositoryUrl(authProperties)) {
-                    authentication(userName: getRepositoryUsername(authProperties), password: getRepositoryPassword(authProperties))
+                    authentication(userName: getRepositoryUsername(authProperties),
+                            password: getRepositoryPassword(authProperties))
                 }
                 snapshotRepository(url: getSnapshotRepositoryUrl(authProperties)) {
-                    authentication(userName: getRepositoryUsername(authProperties), password: getRepositoryPassword(authProperties))
+                    authentication(userName: getRepositoryUsername(authProperties),
+                            password: getRepositoryPassword(authProperties))
                 }
 
                 pom.project {
