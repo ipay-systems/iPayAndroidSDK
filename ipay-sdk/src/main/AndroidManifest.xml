@@ -16,6 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".sdk.activity.IPayWebCheckoutActivity"
+            android:screenOrientation="portrait"
             android:label="@string/ipay_checkout"
             />
         <provider
