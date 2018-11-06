@@ -4,7 +4,7 @@ layout: default
 
 ## i. Download the iPay SDK for Android
 
-[![Download SDK](./assets/img/button_download-ipay-sdk.png)](https://repo1.maven.org/maven2/bd/com/ipay/sdk/sdk-android/1.0.4/sdk-android-1.0.4.aar)
+[![Download SDK](./assets/img/button_download-ipay-sdk.png)](https://repo1.maven.org/maven2/bd/com/ipay/sdk/sdk-android/1.0.5/sdk-android-1.0.5.aar)
 
 ## ii. Import the iPay SDK
 
@@ -17,7 +17,11 @@ To use the iPay SDK in a project, simply add the dependency to your build.gradle
 2.  _Select API 16: Android 4.1 ( Jelly Bean ) or higher and create your new project._
 3.  _In your project, open your_app_module \| Gradle Scripts \| build.gradle (Project) and add the following line to the <span style="color:#00B2A2">dependencies{ }</span> section._
 ```groovy
-implementation "bd.com.ipay.sdk:sdk-android:1.0.4"
+implementation "bd.com.ipay.sdk:sdk-android:1.0.5"
+```
+If your project using kotlin and development language then add the following line to the <span style="color:#00B2A2">dependencies{ }</span> section.
+```groovy
+implementation "bd.com.ipay.sdk:sdk-android-ktx:1.0.5"
 ```
 4.  _Build your project._
 
@@ -92,8 +96,8 @@ public void iPayCheckoutPayment(Activity activity, String paymentUrl) {
 ```
 ```kotlin
  // sample kotlin checkout code.
- fun iPayCheckoutPayment(activity : Activity, paymentUrl : String) {
-    val checkoutState = IPaySDK.performCheckout(activity, paymentUrl)  
+ fun iPayCheckoutPayment(paymentUrl : String) {
+    val checkoutState = performCheckout(paymentUrl)  
  }
 ```
 
@@ -119,9 +123,9 @@ public void iPayCheckoutPayment(Activity activity, String paymentUrl) {
 const val SHOULD_THROW_ERROR_WHILE_PERFORMING_CHECKOUT = true
 const val SHOULD_RECEIVE_RESULT_ON_NEW_ACTIVITY = true
 
-fun iPayCheckoutPayment(activity : Activity, paymentUrl : String) {
+fun iPayCheckoutPayment(paymentUrl : String) {
     try {
-        val checkoutState = IPaySDK.performCheckout(activity, paymentUrl, SHOULD_THROW_ERROR_WHILE_PERFORMING_CHECKOUT, SHOULD_RECEIVE_RESULT_ON_NEW_ACTIVITY) 
+        val checkoutState = performCheckout(paymentUrl, SHOULD_THROW_ERROR_WHILE_PERFORMING_CHECKOUT, SHOULD_RECEIVE_RESULT_ON_NEW_ACTIVITY) 
     }catch(e: Exception) {
         // perform checkout failed exceptions
     }
