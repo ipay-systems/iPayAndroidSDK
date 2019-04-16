@@ -25,3 +25,4 @@ docs/.sass-cache/
 docs/_site/
 .idea/markdown-navigator.xml
 .idea/markdown-navigator/
+ipay-sdk-kotlin-extension/libs/

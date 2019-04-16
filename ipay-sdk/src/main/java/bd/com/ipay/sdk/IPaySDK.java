@@ -54,17 +54,20 @@ public final class IPaySDK {
 	/**
 	 * The key for the application ID in the Android manifest.
 	 */
-	private static final String LOG_SDK_EVENTS_ENABLED_PROPERTY = "bd.com.ipay.sdk.LogSdkEventsEnabled";
+	private static final String LOG_SDK_EVENTS_ENABLED_PROPERTY
+			= "bd.com.ipay.sdk.LogSdkEventsEnabled";
 
 	/**
 	 * The key for the callback off set in the Android manifest.
 	 */
-	private static final String CALLBACK_REQUEST_CODE_PROPERTY = "bd.com.ipay.sdk.CallbackRequestCode";
+	private static final String CALLBACK_REQUEST_CODE_PROPERTY
+			= "bd.com.ipay.sdk.CallbackRequestCode";
 
 	/**
 	 * The key for the callback off set in the Android manifest.
 	 */
-	private static final String CALLBACK_ACTIVITY_NAME_PROPERTY = "bd.com.ipay.sdk.CallbackActivityName";
+	private static final String CALLBACK_ACTIVITY_NAME_PROPERTY
+			= "bd.com.ipay.sdk.CallbackActivityName";
 
 	/**
 	 * request code to create Checkout Activity.
@@ -111,10 +114,10 @@ public final class IPaySDK {
 	}
 
 	/**
-	 * As iPay SDK initializes automatically(<b>This function is called automatically on app start up</b>),
-	 * there is no necessity to call this method. Although this method can be called manually if needed.
-	 * This method mainly verifies few cases to check if the user mobile environment is suitable enough
-	 * to perform iPay checkout.
+	 * As iPay SDK initializes automatically(<b>This function is called automatically on app
+	 * start up</b>), there is no necessity to call this method. Although this method can be
+	 * called manually if needed. This method mainly verifies few cases to check if the user
+	 * mobile environment is suitable enough to perform iPay checkout.
 	 *
 	 * @param applicationContext The application context
 	 */
@@ -123,16 +126,17 @@ public final class IPaySDK {
 	}
 
 	/**
-	 * As iPay SDK initializes automatically(<b>This function is called automatically on app start up</b>),
-	 * there is no necessity to call this method. Although this method can be called manually if needed.
-	 * This method mainly verifies few cases to check if the user mobile environment is suitable enough
-	 * to perform iPay checkout.
+	 * As iPay SDK initializes automatically(<b>This function is called automatically on
+	 * app start up</b>), there is no necessity to call this method. Although this method can
+	 * be called manually if needed. This method mainly verifies few cases to check if the user
+	 * mobile environment is suitable enough to perform iPay checkout.
 	 *
 	 * @param applicationContext The application context
 	 * @param initializeCallback An initialize callback to get the status of the initialization.
 	 */
 	@SuppressWarnings({"ConstantConditions", "WeakerAccess"})
-	public static synchronized void initialize(@NonNull final Context applicationContext, @Nullable InitializeCallback initializeCallback) {
+	public static synchronized void initialize(@NonNull final Context applicationContext,
+	                                           @Nullable InitializeCallback initializeCallback) {
 		try {
 			if (IPaySDK.isInitialized()) {
 				if (initializeCallback != null) {
@@ -140,15 +144,18 @@ public final class IPaySDK {
 				}
 			} else {
 				//Checks if param applicationContext is null or not.
-				if (!SDKUtils.notNull(applicationContext, "applicationContext", initializeCallback)) {
+				if (!SDKUtils.notNull(applicationContext, "applicationContext",
+						initializeCallback)) {
 					return;
 				}
 
 				IPaySDK.initDefaultsFromMetadata(applicationContext);
-				if (!SDKUtils.hasIPayCheckoutActivity(applicationContext, initializeCallback, false)) {
+				if (!SDKUtils.hasIPayCheckoutActivity(applicationContext, initializeCallback,
+						false)) {
 					return;
 				}
-				if (!SDKUtils.isValidUrlSchemeAdded(applicationContext, initializeCallback, false)) {
+				if (!SDKUtils.isValidUrlSchemeAdded(applicationContext, initializeCallback,
+						false)) {
 					return;
 				}
 
@@ -180,12 +187,13 @@ public final class IPaySDK {
 	}
 
 	/**
-	 * When the sdk initialization starts, SDK module needs to setup few values from AndroidManifest.xml
-	 * Application metadata. This method performs that.
+	 * When the sdk initialization starts, SDK module needs to setup few values from
+	 * AndroidManifest.xml Application metadata. This method performs that.
 	 *
 	 * @param context an android context
 	 * @throws IPaySDKInitializeException if the metadata found from the
-	 *                                    AndroidManifest.xml doesn't match the expected class type.
+	 *                                    AndroidManifest.xml doesn't match the expected
+	 *                                    class type.
 	 * @throws IllegalArgumentException   check {@link IPaySDK#setCheckoutRequestCode(int)}
 	 */
 	private static void initDefaultsFromMetadata(@NonNull Context context) {
@@ -208,34 +216,41 @@ public final class IPaySDK {
 
 			// Getting SDK Events Log Enable Property
 			try {
-				setDebugLogEnabled(applicationInfo.metaData.getBoolean(LOG_SDK_EVENTS_ENABLED_PROPERTY, true));
+				setDebugLogEnabled(applicationInfo.metaData
+						.getBoolean(LOG_SDK_EVENTS_ENABLED_PROPERTY, true));
 			} catch (ClassCastException e) {
 				throw new IPaySDKInitializeException("Logging enable property must be boolean", e);
 			}
 
 			// Getting Callback Request Code Property
 			try {
-				setCheckoutRequestCode(applicationInfo.metaData.getInt(CALLBACK_REQUEST_CODE_PROPERTY, DEFAULT_CHECKOUT_REQUEST_CODE));
+				setCheckoutRequestCode(applicationInfo.metaData
+						.getInt(CALLBACK_REQUEST_CODE_PROPERTY, DEFAULT_CHECKOUT_REQUEST_CODE));
 			} catch (ClassCastException e) {
 				throw new IPaySDKInitializeException("Checkout Request Code value must be int", e);
 			} catch (IllegalArgumentException e) {
-				throw new IPaySDKInitializeException(String.format("%s for %s", e.getMessage(), CALLBACK_REQUEST_CODE_PROPERTY), e);
+				throw new IPaySDKInitializeException(String.format("%s for %s", e.getMessage(),
+						CALLBACK_REQUEST_CODE_PROPERTY), e);
 			}
 
 			// Getting the name of the callback Activity
 			String tempCheckoutCallbackActivity;
 			try {
-				tempCheckoutCallbackActivity = applicationInfo.metaData.getString(CALLBACK_ACTIVITY_NAME_PROPERTY, null);
+				tempCheckoutCallbackActivity = applicationInfo.metaData
+						.getString(CALLBACK_ACTIVITY_NAME_PROPERTY, null);
 
-				if (tempCheckoutCallbackActivity == null || tempCheckoutCallbackActivity.isEmpty()) {
+				if (tempCheckoutCallbackActivity == null
+						|| tempCheckoutCallbackActivity.isEmpty()) {
 					return;
 				}
 				if (tempCheckoutCallbackActivity.startsWith(".")) {
-					tempCheckoutCallbackActivity = context.getPackageName() + tempCheckoutCallbackActivity;
+					tempCheckoutCallbackActivity = context.getPackageName()
+							+ tempCheckoutCallbackActivity;
 				}
 				setCheckoutCallBackActivity(context, tempCheckoutCallbackActivity);
 			} catch (ClassCastException e) {
-				throw new IPaySDKInitializeException("Checkout Callback Activity class name must be String", e);
+				throw new IPaySDKInitializeException("Checkout Callback Activity " +
+						"class name must be String", e);
 			} catch (IllegalArgumentException e) {
 				throw new IPaySDKInitializeException(e.getMessage(), e);
 			}
@@ -243,41 +258,48 @@ public final class IPaySDK {
 	}
 
 	/**
-	 * If the device have iPay app installed, for a valid checkout url, this method will perform a checkout through
-	 * iPay app. In case of iPay isn't present it will open Play Store to install the iPay app.
+	 * If the device have iPay app installed, for a valid checkout url, this method will
+	 * perform a checkout through iPay app. In case of iPay isn't present it will open
+	 * Play Store to install the iPay app.
 	 *
 	 * @param activity    An android Activity
 	 * @param checkoutUrl iPay checkout url
-	 * @return
+	 * @return the state of the checkout.
 	 */
 	@SuppressWarnings("unused")
-	public static CheckoutState performCheckout(@NonNull Activity activity, @NonNull String checkoutUrl) {
+	public static CheckoutState performCheckout(@NonNull Activity activity,
+	                                            @NonNull String checkoutUrl) {
 		return performCheckout(activity, checkoutUrl, false);
 	}
 
 	/**
-	 * If the device have iPay app installed, for a valid checkout url, this method will perform a checkout through
-	 * iPay app. In case of iPay isn't present it can to do two things depending on the param shouldThrow value.
-	 * If the value is true then it will throw an {@link IPaySDKException} exception. Otherwise it will
-	 * open Play Store to install the iPay app.
+	 * If the device have iPay app installed, for a valid checkout url, this method will perform
+	 * a checkout through iPay app. In case of iPay isn't present it can to do two things
+	 * depending on the param shouldThrow value. If the value is true then it will throw
+	 * an {@link IPaySDKException} exception. Otherwise it will open Play Store to
+	 * install the iPay app.
 	 *
 	 * @param activity    An android Activity
 	 * @param checkoutUrl iPay checkout url
 	 * @param shouldThrow should the method throw an exception for error or not
+	 * @return the state of the checkout.
 	 * @throws IPaySDKException if the param shouldThrow is true then this method will throw
 	 *                          {@link IPaySDKException} if IPay app isn't installed on device.
 	 */
 	@SuppressWarnings("WeakerAccess")
-	public static CheckoutState performCheckout(@NonNull Activity activity, @NonNull String checkoutUrl, boolean shouldThrow) {
+	public static CheckoutState performCheckout(@NonNull Activity activity,
+	                                            @NonNull String checkoutUrl,
+	                                            boolean shouldThrow) {
 		return performCheckout(activity, checkoutUrl, shouldThrow, false);
 	}
 
 	/**
-	 * If the device have iPay app installed, for a valid checkout url, this method will perform a checkout through
-	 * iPay app. In case of iPay isn't present it can to do two things depending on the param shouldThrow value.
-	 * If the value is true then it will throw an {@link IPaySDKException} exception. Otherwise it will
-	 * open Play Store to install the iPay app. When the param useCallbackActivity is true, after completing a checkout.
-	 * IPaySDK will send necessary data to the provided callback activity not to the activity from it was called.
+	 * If the device have iPay app installed, for a valid checkout url, this method will
+	 * perform a checkout through iPay app. In case of iPay isn't present it can to do two things
+	 * depending on the param shouldThrow value. If the value is true then it will throw an
+	 * {@link IPaySDKException} exception. Otherwise it will open Play Store to install the iPay
+	 * app. When the param useCallbackActivity is true, after completing a checkout. IPaySDK will
+	 * send necessary data to the provided callback activity not to the activity from it was called.
 	 *
 	 * @param activity            An android Activity
 	 * @param checkoutUrl         iPay checkout url
@@ -289,14 +311,18 @@ public final class IPaySDK {
 	 *                          {@link IPaySDKException} if IPay app isn't installed on device.
 	 */
 	@SuppressWarnings({"WeakerAccess"})
-	public static CheckoutState performCheckout(@NonNull Activity activity, @NonNull String checkoutUrl, boolean shouldThrow, boolean useCallbackActivity) {
+	public static CheckoutState performCheckout(@NonNull Activity activity,
+	                                            @NonNull String checkoutUrl,
+	                                            boolean shouldThrow,
+	                                            boolean useCallbackActivity) {
 		try {
 			SDKUtils.notNull(activity, "activity");
 			SDKUtils.notNull(checkoutUrl, "checkoutUrl");
 
 
 			if (!SDKUtils.isValidIPayCheckoutUrl(checkoutUrl)) {
-				throw new InvalidCheckoutUrlException("Provided url isn't valid to perform checkout");
+				throw new InvalidCheckoutUrlException("Provided url isn't valid to " +
+						"perform checkout");
 			}
 
 			if (SDKUtils.isIPayAppInstalled(activity, shouldThrow)) {
@@ -306,14 +332,17 @@ public final class IPaySDK {
 				Intent intent = new Intent(activity, IPayCheckoutActivity.class);
 				intent.putExtra(IPayCheckoutActivity.IPAY_CHECKOUT_URL_KEY, checkoutUrl);
 				if (useCallbackActivity && TextUtils.isEmpty(getCheckoutCallBackActivity())) {
-					throw new IPaySDKException(Constants.CHECKOUT_COMPLETE_CALLBACK_ACTIVITY_NOT_DECLARED_REASON);
+					throw new IPaySDKException(Constants
+							.CHECKOUT_COMPLETE_CALLBACK_ACTIVITY_NOT_DECLARED_REASON);
 				} else {
-					intent.putExtra(IPayCheckoutActivity.CHECKOUT_COMPLETE_START_COMPONENT_KEY, useCallbackActivity);
+					intent.putExtra(IPayCheckoutActivity.CHECKOUT_COMPLETE_START_COMPONENT_KEY,
+							useCallbackActivity);
 				}
 				if (useCallbackActivity) {
 					ActivityCompat.startActivity(activity, intent, null);
 				} else {
-					ActivityCompat.startActivityForResult(activity, intent, getCheckoutRequestCode(), null);
+					ActivityCompat.startActivityForResult(activity, intent,
+							getCheckoutRequestCode(), null);
 				}
 				return CheckoutState.PROCESSING;
 			} else {
@@ -332,7 +361,9 @@ public final class IPaySDK {
 				throw e;
 			} else {
 				Logger.e(TAG, e);
-				if (!TextUtils.isEmpty(e.getMessage()) && e.getMessage().equals(Constants.CHECKOUT_COMPLETE_CALLBACK_ACTIVITY_NOT_DECLARED_REASON))
+				if (!TextUtils.isEmpty(e.getMessage())
+						&& e.getMessage()
+						.equals(Constants.CHECKOUT_COMPLETE_CALLBACK_ACTIVITY_NOT_DECLARED_REASON))
 					return CheckoutState.CHECKOUT_COMPLETE_ACTIVITY_NOT_FOUND;
 				else
 					return CheckoutState.UNABLE_TO_PROCESS;
@@ -341,7 +372,8 @@ public final class IPaySDK {
 			if (shouldThrow) {
 				throw new IPaySDKException(e.getMessage(), e);
 			} else {
-				if (e.getMessage() != null && e.getMessage().equals(Constants.NO_IPAY_APP_INSTALLED_REASON)) {
+				if (e.getMessage() != null
+						&& e.getMessage().equals(Constants.NO_IPAY_APP_INSTALLED_REASON)) {
 					Logger.e(TAG, e);
 					return CheckoutState.IPAY_APP_NOT_INSTALLED;
 				} else {
@@ -360,31 +392,44 @@ public final class IPaySDK {
 	}
 
 	/**
-	 * For a valid checkout url, this method will perform a checkout through iPay app. In case of iPay isn't present
-	 * it will checkout via {@link android.webkit.WebView}. IPaySDK will send necessary data to the calling activity.
+	 * For a valid checkout url, this method will perform a checkout through iPay app.
+	 * In case of iPay isn't present it will checkout via {@link android.webkit.WebView}.
+	 * IPaySDK will send necessary data to the calling activity.
 	 *
 	 * @param activity                   An android Activity
 	 * @param checkoutUrl                iPay checkout url
-	 * @param checkoutCallbackActionUrls all three callback urls which was give to iPay during the creation of the checkout
+	 * @param checkoutCallbackActionUrls all three callback urls which was give to iPay during the
+	 *                                   creation of the checkout
 	 * @return the state of the checkout.
 	 */
-	public static CheckoutState performCheckoutWithFallback(@NonNull Activity activity, @NonNull String checkoutUrl, @NonNull CheckoutCallbackActionUrls checkoutCallbackActionUrls) {
-		return performCheckoutWithFallback(activity, checkoutUrl, false, checkoutCallbackActionUrls);
+	@SuppressWarnings("unused")
+	public static CheckoutState performCheckoutWithFallback(@NonNull Activity activity,
+	                                                        @NonNull String checkoutUrl,
+	                                                        @NonNull CheckoutCallbackActionUrls
+			                                                        checkoutCallbackActionUrls) {
+		return performCheckoutWithFallback(activity, checkoutUrl, false,
+				checkoutCallbackActionUrls);
 	}
 
 	/**
-	 * For a valid checkout url, this method will perform a checkout through iPay app. In case of iPay isn't present
-	 * it will checkout via {@link android.webkit.WebView}. When the param useCallbackActivity is true, after completing a checkout.
-	 * IPaySDK will send necessary data to the provided callback activity not to the activity from it was called.
+	 * For a valid checkout url, this method will perform a checkout through iPay app. In case of
+	 * iPay isn't present it will checkout via {@link android.webkit.WebView}. When the param
+	 * useCallbackActivity is true, after completing a checkout. IPaySDK will send necessary data
+	 * to the provided callback activity not to the activity from it was called.
 	 *
 	 * @param activity                   An android Activity
 	 * @param checkoutUrl                iPay checkout url
-	 * @param useCallbackActivity        Should the method send the data to another activity for completing
-	 *                                   the checkout or not
-	 * @param checkoutCallbackActionUrls all three callback urls which was give to iPay during the creation of the checkout
+	 * @param useCallbackActivity        Should the method send the data to another activity for
+	 *                                   completing the checkout or not
+	 * @param checkoutCallbackActionUrls all three callback urls which was give to iPay during
+	 *                                   the creation of the checkout
 	 * @return the state of the checkout.
 	 */
-	public static CheckoutState performCheckoutWithFallback(@NonNull Activity activity, @NonNull String checkoutUrl, boolean useCallbackActivity, @NonNull CheckoutCallbackActionUrls checkoutCallbackActionUrls) {
+	public static CheckoutState performCheckoutWithFallback(@NonNull Activity activity,
+	                                                        @NonNull String checkoutUrl,
+	                                                        boolean useCallbackActivity,
+	                                                        @NonNull CheckoutCallbackActionUrls
+			                                                        checkoutCallbackActionUrls) {
 		try {
 			SDKUtils.notNull(activity, "activity");
 			SDKUtils.notNull(checkoutUrl, "checkoutUrl");
@@ -402,35 +447,42 @@ public final class IPaySDK {
 				case IPAY_APP_NOT_INSTALLED:
 					Intent intent = new Intent(activity, IPayWebCheckoutActivity.class);
 					intent.putExtra(IPayCheckoutActivity.IPAY_CHECKOUT_URL_KEY, checkoutUrl);
-					intent.putExtra(IPayWebCheckoutActivity.THIRD_PARTY_CHECKOUT_CALLBACK_URL_KEY, checkoutCallbackActionUrls);
+					intent.putExtra(IPayWebCheckoutActivity.THIRD_PARTY_CHECKOUT_CALLBACK_URL_KEY,
+							checkoutCallbackActionUrls);
 					if (useCallbackActivity && TextUtils.isEmpty(getCheckoutCallBackActivity())) {
 						return CheckoutState.CHECKOUT_COMPLETE_ACTIVITY_NOT_FOUND;
 					} else {
-						intent.putExtra(IPayCheckoutActivity.CHECKOUT_COMPLETE_START_COMPONENT_KEY, useCallbackActivity);
+						intent.putExtra(IPayCheckoutActivity.CHECKOUT_COMPLETE_START_COMPONENT_KEY,
+								useCallbackActivity);
 					}
 					if (useCallbackActivity) {
 						ActivityCompat.startActivity(activity, intent, null);
 					} else {
-						ActivityCompat.startActivityForResult(activity, intent, getCheckoutRequestCode(), null);
+						ActivityCompat.startActivityForResult(activity, intent,
+								getCheckoutRequestCode(), null);
 					}
 					return CheckoutState.PROCESSING;
 				default:
 					return checkoutState;
 			}
 		} catch (IPaySDKException e) {
-			if (e.getMessage() != null && e.getMessage().equals(Constants.NO_IPAY_APP_INSTALLED_REASON)) {
+			if (e.getMessage() != null
+					&& e.getMessage().equals(Constants.NO_IPAY_APP_INSTALLED_REASON)) {
 				Intent intent = new Intent(activity, IPayWebCheckoutActivity.class);
 				intent.putExtra(IPayCheckoutActivity.IPAY_CHECKOUT_URL_KEY, checkoutUrl);
-				intent.putExtra(IPayWebCheckoutActivity.THIRD_PARTY_CHECKOUT_CALLBACK_URL_KEY, checkoutCallbackActionUrls);
+				intent.putExtra(IPayWebCheckoutActivity.THIRD_PARTY_CHECKOUT_CALLBACK_URL_KEY,
+						checkoutCallbackActionUrls);
 				if (useCallbackActivity && TextUtils.isEmpty(getCheckoutCallBackActivity())) {
 					return CheckoutState.CHECKOUT_COMPLETE_ACTIVITY_NOT_FOUND;
 				} else {
-					intent.putExtra(IPayCheckoutActivity.CHECKOUT_COMPLETE_START_COMPONENT_KEY, useCallbackActivity);
+					intent.putExtra(IPayCheckoutActivity.CHECKOUT_COMPLETE_START_COMPONENT_KEY,
+							useCallbackActivity);
 				}
 				if (useCallbackActivity) {
 					ActivityCompat.startActivity(activity, intent, null);
 				} else {
-					ActivityCompat.startActivityForResult(activity, intent, getCheckoutRequestCode(), null);
+					ActivityCompat.startActivityForResult(activity, intent,
+							getCheckoutRequestCode(), null);
 				}
 				return CheckoutState.PROCESSING;
 			} else {
@@ -506,7 +558,8 @@ public final class IPaySDK {
 	 */
 	@SuppressWarnings("WeakerAccess")
 	@SuppressLint("WrongConstant")
-	public static void setCheckoutCallBackActivity(@NonNull Context context, @NonNull String checkoutCallBackActivity) {
+	public static void setCheckoutCallBackActivity(@NonNull Context context,
+	                                               @NonNull String checkoutCallBackActivity) {
 		SDKUtils.notNull(context, "context");
 		SDKUtils.notNull(checkoutCallBackActivity, "checkoutCallBackActivity");
 
@@ -514,10 +567,12 @@ public final class IPaySDK {
 		try {
 			activityInfo = SDKUtils.getActivityInfo(context, checkoutCallBackActivity);
 		} catch (PackageManager.NameNotFoundException e) {
-			throw new IllegalArgumentException(Constants.CHECKOUT_COMPLETE_CALLBACK_ACTIVITY_NOT_FOUND_REASON);
+			throw new IllegalArgumentException(Constants
+					.CHECKOUT_COMPLETE_CALLBACK_ACTIVITY_NOT_FOUND_REASON);
 		}
 		if (activityInfo == null) {
-			throw new IllegalArgumentException(Constants.CHECKOUT_COMPLETE_CALLBACK_ACTIVITY_NOT_FOUND_REASON);
+			throw new IllegalArgumentException(Constants
+					.CHECKOUT_COMPLETE_CALLBACK_ACTIVITY_NOT_FOUND_REASON);
 		}
 
 		IPaySDK.checkoutCallBackActivity = checkoutCallBackActivity;
@@ -544,7 +599,12 @@ public final class IPaySDK {
 	 * Values to mark Checkout State
 	 */
 	public enum CheckoutState {
-		CHECKOUT_COMPLETE_ACTIVITY_NOT_FOUND, IPAY_APP_NOT_INSTALLED, INVALID_CHECKOUT_URL, UNABLE_TO_PROCESS, PROCESSING, INVALID_CHECKOUT_CALLBACK_URLS
+		CHECKOUT_COMPLETE_ACTIVITY_NOT_FOUND,
+		IPAY_APP_NOT_INSTALLED,
+		INVALID_CHECKOUT_URL,
+		UNABLE_TO_PROCESS,
+		PROCESSING,
+		INVALID_CHECKOUT_CALLBACK_URLS
 	}
 
 	/**
